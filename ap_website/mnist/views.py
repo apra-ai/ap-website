@@ -8,6 +8,8 @@ from .NN.FNN import FNN
 from .NN.CNN import CNN
 import torch.nn as nn
 import matplotlib.pyplot  as plt
+import matplotlib
+matplotlib.use('Agg')
 import pandas as pd
 import io
 import base64
@@ -26,17 +28,16 @@ def grid(request):
     return JsonResponse({"fnn":img_base64_fnn, "cnn":img_base64_cnn}, status=200)
 
 def predict(grid):
-    
     #FNN
     grid_flattend = torch.tensor(np.array(grid).T.tolist()).view(-1, 784).type(torch.float32)
     model=FNN()
-    model.load_state_dict(torch.load('C:\\Users\\prale\\OneDrive\\Desktop\\ap_website\\ap_website\\mnist\\NN\\modelfnn.pth'))
+    model.load_state_dict(torch.load('C:\\Users\\prale\\OneDrive\\GitHub\\ap-website\\ap_website\\mnist\\NN\\modelfnn.pth', weights_only=True,map_location=torch.device('cpu')))
     prediction = model(grid_flattend)
     _, predicted = torch.max(prediction, 1)
 
     #CNN
     modelcnn=CNN()
-    modelcnn.load_state_dict(torch.load('C:\\Users\\prale\\OneDrive\\Desktop\\ap_website\\ap_website\\mnist\\NN\\modelcnn.pth'))
+    modelcnn.load_state_dict(torch.load('C:\\Users\\prale\\OneDrive\\GitHub\\ap-website\\ap_website\\mnist\\NN\\modelcnn.pth', weights_only=True,map_location=torch.device('cpu')))
     grid_tensor = torch.tensor([[np.array(grid).T.tolist()]]).type(torch.float32)
     predictioncnn = modelcnn(grid_tensor)
     softmax = nn.Softmax(dim=1)
@@ -44,8 +45,6 @@ def predict(grid):
     _, predictedcnn = torch.max(predictioncnn, 1)
     plot_prediction_list = softmax(prediction)*100
     plot_prediction_list_cnn = softmax(predictioncnn)*100
-    print(prediction)
-    print(predictioncnn)
 
     #BytesIO-Objekt
     plt_fnn = generate_plot(plot_prediction_list, "FNN")
