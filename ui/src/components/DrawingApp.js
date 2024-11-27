@@ -99,7 +99,7 @@ const DrawingApp = () => {
               key={i}
               points={[i * scaleFactor, 0, i * scaleFactor, displaySize]}
               stroke="#ddd"
-              strokeWidth={1}
+              strokeWidth={2}
             />
           ))}
           {Array.from({ length: canvasSize }, (_, i) => (
@@ -107,7 +107,7 @@ const DrawingApp = () => {
               key={`h-${i}`}
               points={[0, i * scaleFactor, displaySize, i * scaleFactor]}
               stroke="#ddd"
-              strokeWidth={1}
+              strokeWidth={2}
             />
           ))}
 

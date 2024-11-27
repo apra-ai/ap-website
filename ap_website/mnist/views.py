@@ -14,6 +14,7 @@ import pandas as pd
 import io
 import base64
 import numpy as np
+import os
 
 @api_view(["PUT",])
 def grid(request):
@@ -28,16 +29,17 @@ def grid(request):
     return JsonResponse({"fnn":img_base64_fnn, "cnn":img_base64_cnn}, status=200)
 
 def predict(grid):
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     #FNN
     grid_flattend = torch.tensor(np.array(grid).T.tolist()).view(-1, 784).type(torch.float32)
     model=FNN()
-    model.load_state_dict(torch.load('C:\\Users\\prale\\OneDrive\\GitHub\\ap-website\\ap_website\\mnist\\NN\\modelfnn.pth', weights_only=True,map_location=torch.device('cpu')))
+    model.load_state_dict(torch.load(f'{base_dir}\\mnist\\NN\\modelfnn.pth', weights_only=True,map_location=torch.device('cpu')))
     prediction = model(grid_flattend)
     _, predicted = torch.max(prediction, 1)
 
     #CNN
     modelcnn=CNN()
-    modelcnn.load_state_dict(torch.load('C:\\Users\\prale\\OneDrive\\GitHub\\ap-website\\ap_website\\mnist\\NN\\modelcnn.pth', weights_only=True,map_location=torch.device('cpu')))
+    modelcnn.load_state_dict(torch.load(f'{base_dir}\\mnist\\NN\\modelcnn.pth', weights_only=True,map_location=torch.device('cpu')))
     grid_tensor = torch.tensor([[np.array(grid).T.tolist()]]).type(torch.float32)
     predictioncnn = modelcnn(grid_tensor)
     softmax = nn.Softmax(dim=1)
