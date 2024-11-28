@@ -19,7 +19,7 @@ ap-website/
 │   ├── src/          # Storage for Components
 │   ├── public/
 │   └── package.json  # Frontend dependencies
-├── backend/          # Django backend
+├── ap_website/          # Django backend
 │   ├── ap_website/
 │   ├── mnist/        # Application related with CNN and FNN
 │   ├── manage.py     # Django management script
@@ -41,7 +41,7 @@ ap-website/
 1. Clone the repository:
    ```bash
    git clone https://github.com/apra-ai/ap-website.git
-   cd ap-website/backend
+   cd ap-website/ap_website
    ```
 
 2. Create a virtual environment:
