@@ -6,6 +6,9 @@ from langchain_qdrant import QdrantVectorStore
 from langchain_huggingface import HuggingFaceEmbeddings
 
 COLLECTION_NAME = "chunks"
+MODEL_NAME = "all-mpnet-base-v2"
+MODEL_KWARGS = {'device': 'cpu'}
+ENCODE_KWARGS = {'normalize_embeddings': False}
 
 def split_text_into_chunks(text):
     text_splitter = RecursiveCharacterTextSplitter(
@@ -19,17 +22,22 @@ def split_text_into_chunks(text):
     return chunks
 
 def embedding(chunks):
-    model_name = "all-mpnet-base-v2"
-    model_kwargs = {'device': 'cpu'}
-    encode_kwargs = {'normalize_embeddings': False}
     embedding_model = HuggingFaceEmbeddings(
-        model_name=model_name,
-        model_kwargs=model_kwargs,
-        encode_kwargs=encode_kwargs
+        model_name=MODEL_NAME,
+        model_kwargs=MODEL_KWARGS,
+        encode_kwargs=ENCODE_KWARGS
     )
     print("setup HuggingFaceEmbeddings")
     client = QdrantClient(path="qdrant.db")
     print("setup QdrantClient")
+
+    # Wenn die Collection bereits existiert, wird der Name überprüft
+    existing_collections = client.get_collections().collections
+    if any(collection.name == COLLECTION_NAME for collection in existing_collections):
+        print(f"Collection '{COLLECTION_NAME}' existiert bereits. Sie wird gelöscht.")
+        # Schritt 2: Löschen der Collection
+        client.delete_collection(collection_name=COLLECTION_NAME)
+    
     client.create_collection(
         collection_name = COLLECTION_NAME,
         vectors_config = VectorParams(size=768, distance=Distance.COSINE)
@@ -47,3 +55,26 @@ def embedding(chunks):
     #vectore_store.add_texts(texts,metadatas=metadatas)
     vectore_store.add_texts(texts)
     print("store chunks in QdrantVectorStore")
+
+def load_db():
+    embedding_model = HuggingFaceEmbeddings(
+        model_name=MODEL_NAME,
+        model_kwargs=MODEL_KWARGS,
+        encode_kwargs=ENCODE_KWARGS
+    )
+    print("setup HuggingFaceEmbeddings")
+    client = QdrantClient(path="qdrant.db")
+    print("setup QdrantClient")
+    vectore_store = QdrantVectorStore(
+        client = client,
+        collection_name = COLLECTION_NAME,
+        embedding = embedding_model 
+    )
+    print("setup QdrantVectorStore")
+
+    return vectore_store
+
+def similarity_search(vectore_store, text, number_results):
+    similaritys = vectore_store.similarity_search_with_relevance_scores(text, k=number_results)
+    print("similarity search")
+    return similaritys
