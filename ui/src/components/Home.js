@@ -1,4 +1,5 @@
 import DrawingApp from ".//DrawingApp"
+import RAG from ".//RAG"
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
@@ -51,7 +52,7 @@ function Home() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        Doc scanner
+        <RAG></RAG>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <DrawingApp></DrawingApp>
