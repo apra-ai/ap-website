@@ -83,7 +83,7 @@ ap-website/
    npm start
    ```
 
-## 🌟 Current AI Project: Digit Recognition
+## 🌟 AI Project 1: Digit Recognition
 
 - **Neural Networks**:
   - Feedforward Neural Network (FNN)
@@ -92,6 +92,18 @@ ap-website/
 - **Interactive Features**:
   - A 28x28 pixel canvas for drawing digits.
   - Predicted probabilities are displayed in a bar chart for real-time feedback.
+
+## 🌟 AI Project 2: **Document Reader with RAG**
+
+- **Retrieval-Augmented Generation (RAG)**:
+  - Combines document retrieval and question answering for accurate results.
+  - Retrieves relevant document sections to enhance the answer quality.
+- **Technology Stack**: 
+  - Qdrant for fast and efficient document retrieval.
+  - `distilbert-base-cased-distilled-squad` model for question answering on retrieved text.
+- **Interactive Features**:
+  - Users can upload documents and ask questions.
+  - The system retrieves the best matching content and provides precise answers.
 
 ## 🌐 Live Preview
 
