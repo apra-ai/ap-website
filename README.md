@@ -41,7 +41,7 @@ ap-website/
 1. Clone the repository:
    ```bash
    git clone https://github.com/apra-ai/ap-website.git
-   cd ap-website/backend
+   cd ap-website/ap_website
    ```
 
 2. Create a virtual environment:
@@ -70,7 +70,7 @@ ap-website/
 
 1. Navigate to the frontend folder:
    ```bash
-   cd ../frontend
+   cd ../ui
    ```
 
 2. Install the dependencies:
