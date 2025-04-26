@@ -6,3 +6,4 @@ node_modules
 merken.txt
 package-lock.json
 replace.txt
+qdrant.db
