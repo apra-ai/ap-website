@@ -4,12 +4,27 @@
 A website designed to showcase and integrate AI projects, combining both frontend interactivity and backend functionality.
 The current project demonstrates neural networks for digit recognition, complete with a drawing interface and visualization of prediction probabilities.
 
-## 🚀 Features
+## 🌟 AI Project 1: Digit Recognition
 
-- **AI Integration**: The website integrates neural networks for digit recognition.
-- **Interactive Drawing Field**: Users can draw digits (28x28 pixels), which are processed by trained neural networks.
-- **Digit Recognition**: Neural networks (FNN and CNN) trained on the **EMNIST dataset** predict digits from 0 to 9.
-- **Probability Visualization**: Results are displayed in a bar chart showing the prediction probabilities for each digit.
+- **Neural Networks**:
+  - Feedforward Neural Network (FNN)
+  - Convolutional Neural Network (CNN)
+- **Dataset**: Trained on the EMNIST dataset for digit recognition (0-9).
+- **Interactive Features**:
+  - A 28x28 pixel canvas for drawing digits.
+  - Predicted probabilities are displayed in a bar chart for real-time feedback.
+
+## 🚀 AI Project 2: **Document Reader with RAG**
+
+- **Retrieval-Augmented Generation (RAG)**:
+  - Combines document retrieval and question answering for accurate results.
+  - Retrieves relevant document sections to enhance the answer quality.
+- **Technology Stack**: 
+  - Qdrant for fast and efficient document retrieval.
+  - `distilbert-base-cased-distilled-squad` model for question answering on retrieved text.
+- **Interactive Features**:
+  - Users can upload documents and ask questions.
+  - The system retrieves the best matching content and provides precise answers.
 
 ## 📂 Project Structure
 
@@ -22,6 +37,7 @@ ap-website/
 ├── backend/          # Django backend
 │   ├── ap_website/
 │   ├── mnist/        # Application related with CNN and FNN
+│   ├── rag/          # Application related with RAG & documentation reading
 │   ├── manage.py     # Django management script
 │   └── requirements.txt  # Backend dependencies
 └── README.md         # Project description
@@ -82,28 +98,6 @@ ap-website/
    ```bash
    npm start
    ```
-
-## 🌟 AI Project 1: Digit Recognition
-
-- **Neural Networks**:
-  - Feedforward Neural Network (FNN)
-  - Convolutional Neural Network (CNN)
-- **Dataset**: Trained on the EMNIST dataset for digit recognition (0-9).
-- **Interactive Features**:
-  - A 28x28 pixel canvas for drawing digits.
-  - Predicted probabilities are displayed in a bar chart for real-time feedback.
-
-## 🌟 AI Project 2: **Document Reader with RAG**
-
-- **Retrieval-Augmented Generation (RAG)**:
-  - Combines document retrieval and question answering for accurate results.
-  - Retrieves relevant document sections to enhance the answer quality.
-- **Technology Stack**: 
-  - Qdrant for fast and efficient document retrieval.
-  - `distilbert-base-cased-distilled-squad` model for question answering on retrieved text.
-- **Interactive Features**:
-  - Users can upload documents and ask questions.
-  - The system retrieves the best matching content and provides precise answers.
 
 ## 🌐 Live Preview
 
