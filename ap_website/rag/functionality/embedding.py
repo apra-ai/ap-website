@@ -13,7 +13,7 @@ ENCODE_KWARGS = {'normalize_embeddings': False}
 def split_text_into_chunks(text):
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=400,
-        chunk_overlap=20,
+        chunk_overlap=150,
         length_function=len,
         is_separator_regex=False,
     )

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import * as pdfjsLib from "pdfjs-dist";
-import { TextField, Button } from '@mui/material';
+import { Box, Card, CardContent, Typography, TextField, Button, Chip } from "@mui/material";
 import { GlobalWorkerOptions } from 'pdfjs-dist/build/pdf';
 import worker from 'pdfjs-dist/build/pdf.worker.entry';
 GlobalWorkerOptions.workerSrc = worker;
 
 const RAG = () => {
     const [responseBackend, setResponseBackend] = useState("");
+    const [responseBackendRag, setResponseBackendRag] = useState("");
     const [query, setQuery] = useState('');
     const [fileName, setFileName] = useState('');
 
@@ -56,30 +57,89 @@ const RAG = () => {
         },
         body: JSON.stringify({ "query": query }),
       });
+      const data = await response.json();
+      setResponseBackendRag(data["message"])
     };
 
-    return (
-        <div>
-            <h4>Upload Pdf</h4>
-            <div>
+    return   (
+      <Box maxWidth="600px" margin="2rem auto" padding="2rem">
+        <Card sx={{ padding: 3, borderRadius: 4, boxShadow: 4 }}>
+          <CardContent>
+  
+            {/* Überschrift */}
+            <Typography variant="h4" align="center" gutterBottom>
+              Upload PDF
+            </Typography>
+  
+            {/* Datei auswählen */}
+            <Box textAlign="center" marginBottom={2}>
+              <Button
+                variant="contained"
+                component="label"
+                sx={{ marginBottom: 2 }}
+              >
+                Select PDF
                 <input
-                    type="file"
-                    accept="application/pdf"
-                    required
-                    onChange={handleFileChange}
+                  type="file"
+                  hidden
+                  accept="application/pdf"
+                  required
+                  onChange={handleFileChange}
                 />
-                
-            </div>
-            <h4>{responseBackend}</h4>
+              </Button>
+  
+              {/* Dateiname als Chip anzeigen */}
+              {fileName && (
+                <Box marginTop={1}>
+                  <Chip label={fileName} variant="outlined" color="primary" />
+                </Box>
+              )}
+            </Box>
+  
+            {/* Bestätigung nach Upload */}
+            {responseBackend && (
+              <Typography
+                variant="subtitle1"
+                align="center"
+                color="success.main"
+                gutterBottom
+              >
+                {responseBackend}
+              </Typography>
+            )}
+  
+            {/* Frage stellen */}
             <TextField
-              id="outlined-basic"
-              label="Ask your Question about the pdf"
-              variant="outlined"
-              onChange={handleChange}
               fullWidth
-              />
-              <Button variant="outlined" onClick={submitQuery}>submit Query</Button>
-        </div>
+              label="Ask your question about the PDF"
+              variant="outlined"
+              value={query}
+              onChange={handleChange}
+              sx={{ marginTop: 3, marginBottom: 2 }}
+            />
+  
+            {/* Abschicken */}
+            <Box textAlign="center" marginBottom={3}>
+              <Button variant="outlined" onClick={submitQuery}>
+                Submit Query
+              </Button>
+            </Box>
+  
+            {/* Antwort auf die Frage */}
+            {responseBackendRag && (
+              <Box bgcolor="#f0f4c3" padding={2} borderRadius={2}>
+                <Typography variant="body1" fontWeight="bold">
+                  Answer:
+                </Typography>
+                <Typography variant="body1" color="primary">
+                  {responseBackendRag}
+                </Typography>
+              </Box>
+            )}
+  
+          </CardContent>
+        </Card>
+      </Box>
     );
 };
 
