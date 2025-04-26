@@ -8,8 +8,12 @@ GlobalWorkerOptions.workerSrc = worker;
 const RAG = () => {
     const [responseBackend, setResponseBackend] = useState("");
     const [responseBackendRag, setResponseBackendRag] = useState("");
+    const [ragContext, setRagContext] = useState("");
     const [query, setQuery] = useState('');
+    const [question, setQuestion] = useState('');
     const [fileName, setFileName] = useState('');
+    const [disabled, setDisabled] = useState(true);
+    
 
     const handleFileChange = async (e) => {
       const file = e.target.files?.[0];
@@ -39,6 +43,10 @@ const RAG = () => {
   
         const data = await response.json();
         setResponseBackend(data["message"])
+        if (data["message"]=="PDF send!"){
+          setDisabled(false)
+        }
+
       };
   
       reader.readAsArrayBuffer(file);
@@ -59,6 +67,8 @@ const RAG = () => {
       });
       const data = await response.json();
       setResponseBackendRag(data["message"])
+      setRagContext(data["context"])
+      setQuestion(query)
     };
 
     return   (
@@ -111,16 +121,17 @@ const RAG = () => {
             {/* Frage stellen */}
             <TextField
               fullWidth
-              label="Ask your question about the PDF"
+              label={disabled ? "Upload PDF First!" : "Ask your question about the PDF"}
               variant="outlined"
               value={query}
+              disabled={disabled}
               onChange={handleChange}
               sx={{ marginTop: 3, marginBottom: 2 }}
             />
   
             {/* Abschicken */}
             <Box textAlign="center" marginBottom={3}>
-              <Button variant="outlined" onClick={submitQuery}>
+              <Button variant="outlined" onClick={submitQuery} disabled={disabled}>
                 Submit Query
               </Button>
             </Box>
@@ -129,11 +140,23 @@ const RAG = () => {
             {responseBackendRag && (
               <Box bgcolor="#f0f4c3" padding={2} borderRadius={2}>
                 <Typography variant="body1" fontWeight="bold">
+                  Question:
+                </Typography>
+                <Typography variant="body1" color="primary">
+                  {query}
+                </Typography>
+                <Typography variant="body1" fontWeight="bold">
+                  Context from pdf:
+                </Typography>
+                <Typography variant="body1" color="primary">
+                  {ragContext}
+                </Typography>
+                <Typography variant="body1" fontWeight="bold">
                   Answer:
                 </Typography>
                 <Typography variant="body1" color="primary">
                   {responseBackendRag}
-                </Typography>
+                </Typography>  
               </Box>
             )}
   

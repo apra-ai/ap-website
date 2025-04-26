@@ -35,4 +35,4 @@ def check_similarity(request):
     print("------------------------")
     print("Answer:", result['answer'])
 
-    return Response({"message": result['answer']}, status=status.HTTP_200_OK)
+    return Response({"message": result['answer'], "context":similaritys[0][0].page_content}, status=status.HTTP_200_OK)

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Stage, Layer, Line } from 'react-konva';
+import { Box, Button, Container, Grid, Typography, Paper } from '@mui/material';
 
 const DrawingApp = () => {
-  const canvasSize = 28; // 28x28 Zielgröße
-  const displaySize = 280; // Zeichenfläche 280x280
-  const scaleFactor = displaySize / canvasSize; // Skalierungsfaktor
+  const canvasSize = 28;
+  const displaySize = 280;
+  const scaleFactor = displaySize / canvasSize;
 
   const [lines, setLines] = useState([]);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -36,12 +37,10 @@ const DrawingApp = () => {
     const x = Math.floor(pos.x / scaleFactor);
     const y = Math.floor(pos.y / scaleFactor);
     if (x >= 0 && x < canvasSize && y >= 0 && y < canvasSize) {
-      // Aktualisiere das 28x28-Grid
       const updatedGrid = [...grid];
-      updatedGrid[y][x] = 1; // Beispiel: Setze Pixel auf 1
+      updatedGrid[y][x] = 1;
       setGrid(updatedGrid);
 
-      // Aktualisiere Linien (für visuelle Darstellung)
       const stageX = x * scaleFactor;
       const stageY = y * scaleFactor;
       setLines([...lines, { points: [stageX, stageY, stageX + 1, stageY + 1] }]);
@@ -59,95 +58,122 @@ const DrawingApp = () => {
 
   const submitGrid = async () => {
     try {
-      // Sende PUT-Anfrage an Backend
       const response = await fetch("http://localhost:8000/api/mnist/grid/", {
-          method: 'PUT',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(grid),
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(grid),
       });
 
       if (response.ok) {
-          // Wenn die Anfrage erfolgreich ist, erhalte das Bild
-          const result = await response.json();
-          setImageSrcfnn(`data:image/png;base64,${result.fnn}`);
-          setImageSrccnn(`data:image/png;base64,${result.cnn}`);
-          console.log("PUT erfolgreich")
+        const result = await response.json();
+        setImageSrcfnn(`data:image/png;base64,${result.fnn}`);
+        setImageSrccnn(`data:image/png;base64,${result.cnn}`);
+        console.log("PUT erfolgreich");
       } else {
-          console.error('Fehler beim Erstellen des Plots:', await response.text());
+        console.error('Fehler beim Erstellen des Plots:', await response.text());
       }
-  } catch (error) {
+    } catch (error) {
       console.error('Fehler bei der Anfrage:', error);
-  }
-}
+    }
+  };
 
   return (
-    <div>
-      <h1>Zeichnen auf 28x28 (Skaliert)</h1>
-      <Stage
-        width={displaySize}
-        height={displaySize}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-      >
-        <Layer>
-          {/* Zeichne ein Raster */}
-          {Array.from({ length: canvasSize }, (_, i) => (
-            <Line
-              key={i}
-              points={[i * scaleFactor, 0, i * scaleFactor, displaySize]}
-              stroke="#ddd"
-              strokeWidth={2}
-            />
-          ))}
-          {Array.from({ length: canvasSize }, (_, i) => (
-            <Line
-              key={`h-${i}`}
-              points={[0, i * scaleFactor, displaySize, i * scaleFactor]}
-              stroke="#ddd"
-              strokeWidth={2}
-            />
-          ))}
+    <Container maxWidth="sm" sx={{ marginTop: '2rem' }}>
+      <Box sx={{ textAlign: 'center', marginBottom: '20px' }}>
+        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>Zeichnen auf 28x28 (Skaliert)</Typography>
+      </Box>
 
-          {/* Zeichne Linien */}
-          {lines.map((line, i) => (
-            <Line
-              key={i}
-              points={line.points}
-              stroke="black"
-              strokeWidth={scaleFactor}
-              lineCap="round"
-            />
-          ))}
-        </Layer>
-      </Stage>
-      <button onClick={clearDrawing}>Löschen</button>
-      <button onClick={submitGrid}>submit grid</button>
-      {imageSrcfnn ? (
-                <div style={{ marginTop: '20px' }}>
-                    <img
-                        src={imageSrcfnn}
-                        alt="Prediction Plot"
-                        style={{ maxWidth: '100%', height: 'auto' }}
-                    />
-                </div>
-            ) : (
-                <p>Kein Plot verfügbar</p>
-            )}
-      {imageSrccnn ? (
-                <div style={{ marginTop: '20px' }}>
-                    <img
-                        src={imageSrccnn}
-                        alt="Prediction Plot"
-                        style={{ maxWidth: '100%', height: 'auto' }}
-                    />
-                </div>
-            ) : (
-                <p>Kein Plot verfügbar</p>
-            )}
-    </div>
+      {/* Zentrierte Box für die Stage */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          border: '2px solid #ddd',
+          borderRadius: '8px',
+          padding: '10px',
+          marginBottom: '20px',
+        }}
+      >
+        <Stage
+          width={displaySize}
+          height={displaySize}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+        >
+          <Layer>
+            {/* Raster */}
+            {Array.from({ length: canvasSize }, (_, i) => (
+              <Line
+                key={i}
+                points={[i * scaleFactor, 0, i * scaleFactor, displaySize]}
+                stroke="#ddd"
+                strokeWidth={1}
+              />
+            ))}
+            {Array.from({ length: canvasSize }, (_, i) => (
+              <Line
+                key={`h-${i}`}
+                points={[0, i * scaleFactor, displaySize, i * scaleFactor]}
+                stroke="#ddd"
+                strokeWidth={1}
+              />
+            ))}
+            {/* Linien */}
+            {lines.map((line, i) => (
+              <Line
+                key={i}
+                points={line.points}
+                stroke="black"
+                strokeWidth={scaleFactor}
+                lineCap="round"
+              />
+            ))}
+          </Layer>
+        </Stage>
+      </Box>
+
+      {/* Buttons */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
+        <Button variant="outlined" color="error" onClick={clearDrawing} fullWidth sx={{ marginRight: '10px' }}>
+          Löschen
+        </Button>
+        <Button variant="contained" color="primary" onClick={submitGrid} fullWidth>
+          Submit Grid
+        </Button>
+      </Box>
+
+      {/* Vorhersagebilder */}
+      <Grid container spacing={2} sx={{ marginTop: '2rem' }}>
+        {imageSrcfnn && (
+          <Grid item xs={12} md={6}>
+            <Paper sx={{ padding: '10px', textAlign: 'center' }}>
+              <Typography variant="h6">FNN Prediction</Typography>
+              <img
+                src={imageSrcfnn}
+                alt="FNN Prediction"
+                style={{ width: '100%', height: 'auto', maxWidth: '600px', marginTop: '10px' }} // Größeres Bild
+              />
+            </Paper>
+          </Grid>
+        )}
+        {imageSrccnn && (
+          <Grid item xs={12} md={6}>
+            <Paper sx={{ padding: '10px', textAlign: 'center' }}>
+              <Typography variant="h6">CNN Prediction</Typography>
+              <img
+                src={imageSrccnn}
+                alt="CNN Prediction"
+                style={{ width: '100%', height: 'auto', maxWidth: '600px', marginTop: '10px' }} // Größeres Bild
+              />
+            </Paper>
+          </Grid>
+        )}
+      </Grid>
+    </Container>
   );
 };
 

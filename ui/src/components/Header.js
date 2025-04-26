@@ -1,14 +1,24 @@
-import { Box, Button, Grid } from "@mui/material"
+import { Box, Button, Grid } from "@mui/material";
 
 function Header() {
-    return (
-        <>
-        <Grid align="center">
-            <font size = "18"><b>APRA AI</b></font>
+  return (
+    <Box sx={{ width: '100%', backgroundColor: '#fff', padding: '16px 0', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', }}>
+      <Grid container justifyContent="center" alignItems="center">
+        <Grid item>
+          <Box sx={{ fontSize: '3rem', fontWeight: 'bold', color: '#333' }}>
+            APRA AI
+          </Box>
         </Grid>
-        <hr/>
-        </>
-    );
-  }
-  
-  export default Header;
+      </Grid>
+      <Box sx={{
+        marginTop: '12px',
+        height: '2px',
+
+        borderRadius: '1px',
+        margin: '10px 0',
+      }} />
+    </Box>
+  );
+}
+
+export default Header;

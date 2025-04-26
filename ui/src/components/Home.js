@@ -1,5 +1,5 @@
-import DrawingApp from ".//DrawingApp"
-import RAG from ".//RAG"
+import DrawingApp from ".//DrawingApp";
+import RAG from ".//RAG";
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
@@ -18,7 +18,20 @@ function CustomTabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && (
+        <Box
+          sx={{
+            p: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.4s ease',
+          }}
+        >
+          {children}
+        </Box>
+      )}
     </div>
   );
 }
@@ -44,18 +57,32 @@ function Home() {
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="RAG Document scanner" {...a11yProps(0)} />
-          <Tab label="MNIST number drawing" {...a11yProps(1)} />
+    <Box sx={{ width: '100%', minHeight: '100vh', backgroundColor: '#f9fafb' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', backgroundColor: 'background.paper' }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          variant="fullWidth"
+          textColor="primary"
+          indicatorColor="primary"
+          aria-label="basic tabs example"
+          sx={{
+            '& .MuiTab-root': {
+              fontWeight: 'bold',
+              fontSize: '1rem',
+              textTransform: 'none',
+            },
+          }}
+        >
+          <Tab label="RAG Document Scanner" {...a11yProps(0)} />
+          <Tab label="MNIST Number Drawing" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <RAG></RAG>
+        <RAG />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <DrawingApp></DrawingApp>
+        <DrawingApp />
       </CustomTabPanel>
     </Box>
   );

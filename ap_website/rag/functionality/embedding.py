@@ -34,7 +34,7 @@ def embedding(chunks):
     # Wenn die Collection bereits existiert, wird der Name überprüft
     existing_collections = client.get_collections().collections
     if any(collection.name == COLLECTION_NAME for collection in existing_collections):
-        print(f"Collection '{COLLECTION_NAME}' existiert bereits. Sie wird gelöscht.")
+        print(f"Collection '{COLLECTION_NAME}' already existed. Old collection gets deleted.")
         # Schritt 2: Löschen der Collection
         client.delete_collection(collection_name=COLLECTION_NAME)
     
@@ -42,7 +42,7 @@ def embedding(chunks):
         collection_name = COLLECTION_NAME,
         vectors_config = VectorParams(size=768, distance=Distance.COSINE)
     )
-    print("setup QdrantClient collectio")
+    print("setup QdrantClient collection")
     vectore_store = QdrantVectorStore(
         client = client,
         collection_name = COLLECTION_NAME,
